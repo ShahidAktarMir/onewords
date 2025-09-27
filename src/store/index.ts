@@ -13,7 +13,14 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredPaths: ['app.wordData.trie', 'app.wordData.phoneticMap', 'app.wordData.difficultyScores'],
+        ignoredPaths: [
+          'app.wordData.trie', 
+          'app.wordData.phoneticMap', 
+          'app.wordData.difficultyScores',
+          'payload.trie',
+          'payload.phoneticMap', 
+          'payload.difficultyScores'
+        ],
       },
     }),
   devTools: process.env.NODE_ENV !== 'production',
