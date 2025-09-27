@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 
 import App from './App';
 import { store } from '@/store';
-import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { store } from './store';
 import '@/styles/globals.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -15,10 +14,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Provider store={store}>
         <BrowserRouter>
           <App />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
+          <Toaster position="top-right" />
+        </BrowserRouter>
               style: {
                 background: '#363636',
                 color: '#fff',
