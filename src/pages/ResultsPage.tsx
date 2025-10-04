@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { RotateCcw, FileText, Trophy, Clock, Target, Zap } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setAppState, reset } from '@/store/slices/appSlice';
 import { resetTest } from '@/store/slices/testSlice';
 import { getPerformanceTier, formatTime } from '@/utils/helpers';
+import { useAuth } from '@/contexts/AuthContext';
+import { testResultsService } from '@/services/testResultsService';
 
 import Card from '@/components/common/Card';
 import Button from '@/components/common/Button';
@@ -14,14 +17,44 @@ import ScoreCircle from '@/components/results/ScoreCircle';
 import StatCard from '@/components/results/StatCard';
 import DetailedReview from '@/components/results/DetailedReview';
 
+declare global {
+  interface Window {
+    confetti?: (options?: { particleCount?: number; spread?: number; origin?: { y?: number } }) => void;
+  }
+}
+
 const ResultsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { results, stats } = useAppSelector(state => state.test);
+  const { testMode } = useAppSelector(state => state.app);
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'summary' | 'review'>('summary');
+  const [resultsSaved, setResultsSaved] = useState(false);
 
   useEffect(() => {
-    // Confetti effect
+    if (stats && results && user && !resultsSaved) {
+      try {
+        testResultsService.saveResult({
+          userId: user.id,
+          testMode: testMode || 'practice',
+          totalQuestions: stats.totalQuestions,
+          attempted: stats.attemptedCount,
+          correct: stats.correctAnswers,
+          incorrect: stats.attemptedCount - stats.correctAnswers,
+          score: stats.scorePercentage,
+          timeTaken: stats.timeTaken,
+          questionsData: results,
+        });
+        setResultsSaved(true);
+        toast.success('Test results saved successfully!');
+      } catch (error) {
+        toast.error('Failed to save test results');
+      }
+    }
+  }, [stats, results, user, testMode, resultsSaved]);
+
+  useEffect(() => {
     const script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js";
     script.async = true;
@@ -29,10 +62,10 @@ const ResultsPage: React.FC = () => {
 
     script.onload = () => {
       if (window.confetti && stats && stats.scorePercentage >= 75) {
-        window.confetti({ 
-          particleCount: 150, 
-          spread: 90, 
-          origin: { y: 0.6 } 
+        window.confetti({
+          particleCount: 150,
+          spread: 90,
+          origin: { y: 0.6 }
         });
       }
     };

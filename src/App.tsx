@@ -7,8 +7,11 @@ import ModeSelectionPage from '@/pages/ModeSelectionPage';
 import TestPage from '@/pages/TestPage';
 import ResultsPage from '@/pages/ResultsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import { AuthPage } from '@/pages/AuthPage';
+import { HistoryPage } from '@/pages/HistoryPage';
 
 import { useAppSelector } from '@/hooks/redux';
+import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -29,77 +32,103 @@ function App() {
     <Layout>
       <AnimatePresence mode="wait">
         <Routes>
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/" element={<Navigate to="/import" replace />} />
           <Route
             path="/import"
             element={
-              <motion.div
-                key="import"
-                initial="initial"
-                animate="in"
-                exit="out"
-                variants={pageVariants}
-                transition={pageTransition}
-              >
-                <ImportPage />
-              </motion.div>
+              <ProtectedRoute>
+                <motion.div
+                  key="import"
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <ImportPage />
+                </motion.div>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/select-mode"
             element={
-              appState === 'import' ? (
-                <Navigate to="/import" replace />
-              ) : (
-                <motion.div
-                  key="select-mode"
-                  initial="initial"
-                  animate="in"
-                  exit="out"
-                  variants={pageVariants}
-                  transition={pageTransition}
-                >
-                  <ModeSelectionPage />
-                </motion.div>
-              )
+              <ProtectedRoute>
+                {appState === 'import' ? (
+                  <Navigate to="/import" replace />
+                ) : (
+                  <motion.div
+                    key="select-mode"
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <ModeSelectionPage />
+                  </motion.div>
+                )}
+              </ProtectedRoute>
             }
           />
           <Route
             path="/test"
             element={
-              appState !== 'test' ? (
-                <Navigate to="/import" replace />
-              ) : (
-                <motion.div
-                  key="test"
-                  initial="initial"
-                  animate="in"
-                  exit="out"
-                  variants={pageVariants}
-                  transition={pageTransition}
-                >
-                  <TestPage />
-                </motion.div>
-              )
+              <ProtectedRoute>
+                {appState !== 'test' ? (
+                  <Navigate to="/import" replace />
+                ) : (
+                  <motion.div
+                    key="test"
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <TestPage />
+                  </motion.div>
+                )}
+              </ProtectedRoute>
             }
           />
           <Route
             path="/results"
             element={
-              appState !== 'results' ? (
-                <Navigate to="/import" replace />
-              ) : (
+              <ProtectedRoute>
+                {appState !== 'results' ? (
+                  <Navigate to="/import" replace />
+                ) : (
+                  <motion.div
+                    key="results"
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <ResultsPage />
+                  </motion.div>
+                )}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <ProtectedRoute>
                 <motion.div
-                  key="results"
+                  key="history"
                   initial="initial"
                   animate="in"
                   exit="out"
                   variants={pageVariants}
                   transition={pageTransition}
                 >
-                  <ResultsPage />
+                  <HistoryPage />
                 </motion.div>
-              )
+              </ProtectedRoute>
             }
           />
           <Route path="*" element={<NotFoundPage />} />

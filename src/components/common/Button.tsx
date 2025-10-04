@@ -52,6 +52,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <Loader2 className="w-4 h-4 animate-spin" />
     ) : icon;
 
+    const {
+      onAnimationStart,
+      onAnimationEnd,
+      onDragStart,
+      onDragEnd,
+      onDrag,
+      ...restProps
+    } = props;
+
     return (
       <motion.button
         ref={ref}
@@ -59,14 +68,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
         whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
-        {...props}
+        {...restProps}
       >
         {iconElement && iconPosition === 'left' && (
           <span className={children ? 'mr-2' : ''}>{iconElement}</span>
         )}
-        
+
         {children}
-        
+
         {iconElement && iconPosition === 'right' && (
           <span className={children ? 'ml-2' : ''}>{iconElement}</span>
         )}

@@ -11,7 +11,6 @@ import { validateFile } from '@/utils/helpers';
 import { APP_CONFIG } from '@/utils/constants';
 
 import Card from '@/components/common/Card';
-import Button from '@/components/common/Button';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const ImportPage: React.FC = () => {

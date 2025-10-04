@@ -7,38 +7,41 @@ import { Toaster } from 'react-hot-toast';
 import App from './App';
 import { store } from '@/store';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { AuthProvider } from '@/contexts/AuthContext';
 import '@/styles/globals.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary>
       <Provider store={store}>
-        <BrowserRouter>
-          <App />
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#22c55e',
-                  secondary: '#fff',
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: '#363636',
+                  color: '#fff',
                 },
-              },
-              error: {
-                duration: 5000,
-                iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
+                success: {
+                  duration: 3000,
+                  iconTheme: {
+                    primary: '#22c55e',
+                    secondary: '#fff',
+                  },
                 },
-              },
-            }}
-          />
-        </BrowserRouter>
+                error: {
+                  duration: 5000,
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#fff',
+                  },
+                },
+              }}
+            />
+          </BrowserRouter>
+        </AuthProvider>
       </Provider>
     </ErrorBoundary>
   </React.StrictMode>

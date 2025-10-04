@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState, ProcessedWordData } from '@/types';
 
-interface AppSliceState {
+export interface AppSliceState {
   appState: AppState;
   wordData: ProcessedWordData | null;
   error: string;
   isProcessing: boolean;
+  testMode?: 'timed' | 'practice' | 'mock';
 }
 
 const initialState: AppSliceState = {
@@ -13,6 +14,7 @@ const initialState: AppSliceState = {
   wordData: null,
   error: '',
   isProcessing: false,
+  testMode: undefined,
 };
 
 const appSlice = createSlice({
@@ -39,6 +41,10 @@ const appSlice = createSlice({
     setAppState: (state, action: PayloadAction<AppState>) => {
       state.appState = action.payload;
     },
+
+    setTestMode: (state, action: PayloadAction<'timed' | 'practice' | 'mock'>) => {
+      state.testMode = action.payload;
+    },
     
     clearError: state => {
       state.error = '';
@@ -53,6 +59,7 @@ export const {
   processingSuccess,
   processingError,
   setAppState,
+  setTestMode,
   clearError,
   reset,
 } = appSlice.actions;
