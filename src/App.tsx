@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '@/components/layout/Layout';
 import ImportPage from '@/pages/ImportPage';
 import ModeSelectionPage from '@/pages/ModeSelectionPage';
-import TestPage from '@/pages/TestPage';
+import EnhancedTestPage from '@/pages/EnhancedTestPage';
 import ResultsPage from '@/pages/ResultsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { AuthPage } from '@/pages/AuthPage';
@@ -86,8 +86,9 @@ function App() {
                     exit="out"
                     variants={pageVariants}
                     transition={pageTransition}
+                    className="h-full"
                   >
-                    <TestPage />
+                    <EnhancedTestPage />
                   </motion.div>
                 )}
               </ProtectedRoute>
